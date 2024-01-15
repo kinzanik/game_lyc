@@ -9,6 +9,7 @@ screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption('Ам Ням в Политехе')
 clock = pygame.time.Clock()
 test_font = pygame.font.Font('font/EightBits.ttf', 50)
+coins_font = pygame.font.Font('font/EightBits.ttf', 40)
 #bg_music = pygame.mixer.Sound('music/menu_music.mp3')
 #bg_music.play(loops=-1)
 # Groups
@@ -18,9 +19,8 @@ player = pygame.sprite.GroupSingle()
 obstacle_group = pygame.sprite.Group()
 board_group = pygame.sprite.Group()
 board_up_group = pygame.sprite.Group()
+coins_group = pygame.sprite.Group()
 
-sky_surface = load_image('graphics/sky.jpg')
-ground_surface = load_image('graphics/grass.png')
 
 # Intro screen
 fairy = AnimatedSprite(load_image("graphics/player/1.png"), 5, 1, 50, 50, player)
@@ -43,8 +43,17 @@ lower_bird = AnimatedSprite(load_image('graphics/damage/bird.png'), 3, 1, 50, 50
 
 white_bird = AnimatedSprite(load_image('graphics/damage/white_bird.png'), 3, 1, 50, 50, obstacle_group)
 
+wolf = AnimatedSprite(load_image('graphics/damage/wolf.png'), 5, 1, 50, 50, obstacle_group)
+
+pig = AnimatedSprite(load_image('graphics/damage/pig.png'), 3, 1, 50, 50, obstacle_group)
+
+horse = AnimatedSprite(load_image('graphics/damage/horse.png'), 3, 1, 50, 50, obstacle_group)
+
 board = load_image('graphics/platformes/board.png')
+
 grass = load_image('graphics/platformes/grass.png')
+
+coin = AnimatedSprite(load_image('graphics/coins/coin.png'), 7, 1, 40, 40, obstacle_group)
 
 file = open('levels/1.txt', mode='r')
 lev = file.readlines()
@@ -58,9 +67,8 @@ for el in lev:
             res += elem
     level.append(res)
 
-obs = level[sett.count_level].split(',')
-activate = True
-print(level)
+
+
 
 
 

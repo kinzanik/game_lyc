@@ -3,26 +3,15 @@ from random import randint
 from load_image import load_image
 from sprites import AnimatedSprite
 from settings import *
-class Obstacle(pygame.sprite.Sprite):
+class Coins(pygame.sprite.Sprite):
     def __init__(self, type):
         super().__init__()
 
 
         self.data = type
-        if type == bat:
-            y_pos = 400
-        elif type == bat_high:
-            y_pos = 340
-        elif type == bird:
-            y_pos = 200
-        elif type == lower_bird:
-            y_pos = 340
-        elif type == wolf:
-            y_pos = 400
-        elif type == pig:
-            y_pos = 400
-        elif type == horse:
-            y_pos = 360
+        if type == coin:
+            y_pos = randint(200, 400)
+
 
         elif type == white_bird:
             y_pos = 350

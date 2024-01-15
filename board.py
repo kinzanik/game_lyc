@@ -9,15 +9,15 @@ class Board(pygame.sprite.Sprite):
 
 
         if type == board:
-            y_pos = 200
+            self.y_pos = 200
         elif type == grass:
-            y_pos = 700
+            self.y_pos = 700
         self.animation_index = 0
         self.image = self.type = type
         if type == grass:
-            self.rect = self.image.get_rect(midbottom=(0, y_pos))
+            self.rect = self.image.get_rect(midbottom=(0, self.y_pos))
         else:
-            self.rect = self.image.get_rect(midbottom=(randint(900, 1100), y_pos))
+            self.rect = self.image.get_rect(midbottom=(randint(900, 1100), self.y_pos))
 
     def animation_state(self):
         pass

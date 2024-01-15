@@ -10,6 +10,7 @@ from bool import sett
 from settings import *
 from login import *
 from info import Info
+from coins import Coins
 from PyQt5.QtCore import Qt, QPoint
 from math import cos, sin, pi
 from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -26,6 +27,10 @@ def display_score():
     score_surf = test_font.render(f'Score: {current_time}', False, (64, 64, 64))
     score_rect = score_surf.get_rect(center=(400, 50))
     screen.blit(score_surf, score_rect)
+
+    coin_surf = coins_font.render(f'coins: {sett.count_coins}', False, (64, 64, 64))
+    coin_rect = score_surf.get_rect(center=(700, 50))
+    screen.blit(coin_surf, coin_rect)
     return current_time
 
 
@@ -34,14 +39,17 @@ def collision_sprite():
         obstacle_group.empty()
         board_group.empty()
         board_up_group.empty()
-
+        coins_group.empty()
         return False
+    if pygame.sprite.spritecollide(player.sprite, coins_group, False):
+        coins_group.empty()
+        sett.count_coins += 1
+        return True
+
     elif pygame.sprite.spritecollide(player.sprite, board_group, False):
-        #  pl.rect = pl.image.get_rect(midbottom=(200, 210))
             sett.pl.update_board()
             return True
     elif pygame.sprite.spritecollide(player.sprite, board_up_group, False):
-        #  pl.rect = pl.image.get_rect(midbottom=(200, 210))
         sett.pl.update_board_up()
         return True
     else:
@@ -71,7 +79,7 @@ while True:
             if event.type == obstacle_timer:
                 sett.count_level += 1
                 try:
-                    obs = level[sett.count_level - 1].split(',')
+                    obs = sett.level[sett.count_level - 1].split(',')
                     print(obs)
                     if obs[0] == 'vv':
                         obstacle_group.add(Obstacle(bat))
@@ -83,8 +91,17 @@ while True:
                         obstacle_group.add(Obstacle(lower_bird))
                     if obs[0] == 'w':
                         obstacle_group.add(Obstacle(white_bird))
-
+                    if obs[0] == 'wol':
+                        obstacle_group.add(Obstacle(wolf))
+                    if obs[0] == 'pig':
+                        obstacle_group.add(Obstacle(pig))
+                    if obs[0] == 'hor':
+                        obstacle_group.add(Obstacle(horse))
                     if obs[0] == 'f':
+                    #    congrat_surf = coins_font.render(f'<br>ты прошел этот уровень!</br>'
+                       #                               f'Поздравляю!!!', False, (64, 64, 64))
+                       # congrat_rect = congrat_surf.get_rect(center=(700, 200))
+                        #screen.blit(congrat_surf, congrat_rect)
                         pass
                     if obs[1] == '-':
                         ex = Board(grass)
@@ -92,8 +109,20 @@ while True:
                     if obs[1] == '--':
                         ex = Board(board)
                         board_group.add(ex)
+
+
                     if obs[1] == 'f':
+                        form1.level.append(str(len(form1.level) + 1))
+                      #  if sett.first:
+                         #   sett.all_levels_count += 1
+                          #  sett.activate_levels += 1
+
+
+                    if obs[2] == 'no':
                         pass
+                    if obs[2] == 'coin':
+
+                        coins_group.add(Coins(coin))
                 except IndexError:
                     pass
 
@@ -125,7 +154,7 @@ while True:
 
     if sett.game_active:
         form1.hide()
-        screen.blit(sky_surface, (0, 0))
+        screen.blit(form1.sky_surface, (0, 0))
 
         sett.score = display_score()
         form1.start_time = 0
@@ -134,13 +163,15 @@ while True:
         obstacle_group.draw(screen)
         player.draw(screen)
         board_group.draw(screen)
+        coins_group.draw(screen)
 
 
         player.update()
         obstacle_group.update()
         board_group.update()
+        coins_group.update()
 
-        screen.blit(ground_surface, (0, 400))
+        screen.blit(form1.ground_surface, (0, 400))
 
       #  board_up_group.draw(screen)
         #board_up_group.update()
@@ -156,6 +187,11 @@ while True:
         bird.update()
         white_bird.update()
         lower_bird.update()
+        wolf.update()
+        pig.update()
+        horse.update()
+
+        coin.update()
 
 
 
