@@ -280,10 +280,15 @@ class DrawEnemy(pygame.sprite.Sprite):
         if self.name.lower() == 'nerdlin':
             self.image_text = './data/Nerdlin'
             self.image = pygame.image.load(f'{self.image_text}{self.count_frames}.png')
+        elif self.name.lower() == 'ghost':
+            self.image_text = './data/ghost1'
+            self.image = pygame.image.load(f'{self.image_text}.png')
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
 
     def update(self):
+        if self.name.lower() == 'ghost':
+            return
         if self.a % 30 == 0 and self.count_frames == 1:
             self.count_frames = 2
         elif self.a % 30 == 0 and self.count_frames == 2:
@@ -384,7 +389,7 @@ class Enemy1(EmptyEnemy):
 class Enemy2(EmptyEnemy):
     def __init__(self):
         super().__init__()
-        self.name = 'Nerdlin'
+        self.name = 'Ghost'
 
     def attack01(self):
         if self.a <= 16 and self.a % 2 == 0:
@@ -439,14 +444,14 @@ while running:
                 choice_enemy = r.randint(1, 2)
                 if choice_enemy == 1:
                     enemy = Enemy1()
+                    DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, 100)
                 elif choice_enemy == 2:
                     enemy = Enemy2()
-                # spider_song.play(loops=-1)
-                DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, 100)
+                    DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, -20)
+                spider_song.play(loops=-1)
 
                 enemy_text = small_font.render(f'На вас напал: {enemy.get_name()}', True, 'white')
                 big_text = big_font.render('НАЖМИТЕ [ПРОБЕЛ] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
-
 
             if enemy.get_is_attacking():
                 if choice_attack == 1:
@@ -489,9 +494,10 @@ while running:
         choice_attack = r.randint(1, 2)
         big_text = big_font.render('', True, 'white')
         enemy_attack_time = False
+        damage_text = small_font.render(f'', True, 'white')
 
     if heart.get_x() < box_x:
-        heart.set_x(box_x + 2)  
+        heart.set_x(box_x + 2)
     if heart.get_x() > box_x + box_width - heart_width:
         heart.set_x(box_x + box_width - heart_width - 2)
     if heart.get_y() < box_y:
