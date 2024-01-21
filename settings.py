@@ -1,11 +1,12 @@
 import pygame
 from load_image import load_image
 from sprites import AnimatedSprite
-from player import Player
 from bool import sett
 
+
+
 pygame.init()
-screen = pygame.display.set_mode((800, 600))
+
 pygame.display.set_caption('Ам Ням в Политехе')
 clock = pygame.time.Clock()
 test_font = pygame.font.Font('font/EightBits.ttf', 50)
@@ -105,5 +106,53 @@ board_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(obstacle_timer, 1500)
 
 #pygame.time.set_timer(board_timer, 1500)
+
+
+box_width, box_height = 204, 204
+box_x, box_y = (1200 - box_width) // 2 + 2, (800 - box_height) // 2
+heart_width, heart_height = 16, 16
+heart_speed = 5
+
+#clock = pygame.time.Clock()
+
+
+player_und = pygame.sprite.Group()
+attack1 = pygame.sprite.Group()
+sprite = pygame.sprite.Sprite()
+enemy_sprite = pygame.sprite.Group()
+attack_bar_group = pygame.sprite.Group()
+line_group = pygame.sprite.Group()
+
+heat_sound = pygame.mixer.Sound('data1/snd_curtgunshot.ogg')
+spider_song = pygame.mixer.Sound('data1/mus_spider.ogg')
+text_sound = pygame.mixer.Sound('data1/text.mp3')
+
+big_font = pygame.font.Font('data1/Minecraft Rus NEW.otf', 40)
+small_font = pygame.font.Font('data1/Minecraft Rus NEW.otf', 20)
+
+
+tetris = [[0] * 10 for i in range(3)]
+
+
+
+
+first_attack = False
+player_und_attacking = False
+draw_big_text = True
+draw_attack_bar = False
+enemy_attack_time = True
+before_len_attack = 0
+
+enemy_text = small_font.render('', True, 'white')
+big_text = big_font.render('', True, 'white')
+damage_text = small_font.render('', True, 'white')
+enemy_hp = small_font.render('', True, 'white')
+box_width, box_height = 204, 204
+
+width, height = 1200, 800
+box_x, box_y = (800) // 2 + 2, (600) // 2
+heart_width, heart_height = 16, 16
+heart_speed = 5
+
 
 

@@ -1,20 +1,15 @@
 from sys import exit
-from random import choice
-from player import *
+
 from obstacle import *
 from board import *
-from boardup import *
-from sprites import *
-from load_image import load_image
-from bool import sett
-from settings import *
+
 from login import *
 from info import Info
 from coins import Coins
-from PyQt5.QtCore import Qt, QPoint
-from math import cos, sin, pi
-from PyQt5.QtWidgets import QApplication, QMainWindow
-from PyQt5.QtGui import QPainter, QColor
+
+from PyQt5.QtWidgets import QApplication
+from lyc import *
+
 
 
 
@@ -26,16 +21,17 @@ def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - sett.start_time
     score_surf = test_font.render(f'Score: {current_time}', False, (64, 64, 64))
     score_rect = score_surf.get_rect(center=(400, 50))
-    screen.blit(score_surf, score_rect)
+    sett.screen.blit(score_surf, score_rect)
 
     coin_surf = coins_font.render(f'coins: {sett.count_coins}', False, (64, 64, 64))
     coin_rect = score_surf.get_rect(center=(700, 50))
-    screen.blit(coin_surf, coin_rect)
+    sett.screen.blit(coin_surf, coin_rect)
     return current_time
 
 
 def collision_sprite():
     if pygame.sprite.spritecollide(player.sprite, obstacle_group, False):
+        sett.running = True
         obstacle_group.empty()
         board_group.empty()
         board_up_group.empty()
@@ -67,11 +63,16 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            print(event.pos)
+            if 200 <= event.pos[0] <= 597 and 350 <= event.pos[1] <= 426:
+                sett.log_in = True
 
         if sett.game_active:
+
             if sett.count_level - 1 == len(level):
                 activate = False
-                sett.count_level = 0
+              #  sett.count_level = 0
                 sett.game_active = False
                 form1.show()
                 obstacle_group.empty()
@@ -98,10 +99,6 @@ while True:
                     if obs[0] == 'hor':
                         obstacle_group.add(Obstacle(horse))
                     if obs[0] == 'f':
-                    #    congrat_surf = coins_font.render(f'<br>ты прошел этот уровень!</br>'
-                       #                               f'Поздравляю!!!', False, (64, 64, 64))
-                       # congrat_rect = congrat_surf.get_rect(center=(700, 200))
-                        #screen.blit(congrat_surf, congrat_rect)
                         pass
                     if obs[1] == '-':
                         ex = Board(grass)
@@ -109,14 +106,8 @@ while True:
                     if obs[1] == '--':
                         ex = Board(board)
                         board_group.add(ex)
-
-
                     if obs[1] == 'f':
                         form1.level.append(str(len(form1.level) + 1))
-                      #  if sett.first:
-                         #   sett.all_levels_count += 1
-                          #  sett.activate_levels += 1
-
 
                     if obs[2] == 'no':
                         pass
@@ -126,17 +117,58 @@ while True:
                 except IndexError:
                     pass
 
-                #     elif event.type == board_timer:
-
-
-            #    else:
-                  #  board_up_group.add(BoardUp(choice(['board', 'board', ''])))
-
         else:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                print(event.pos)
-                if 200 <= event.pos[0] <= 597 and 350 <= event.pos[1] <= 426:
-                    sett.log_in = True
+            if sett.running:
+                if event.type == pike:
+                    a += 1
+                    if a == 2:
+                        choice_enemy = r.randint(1, 2)
+                        if choice_enemy == 1:
+                            enemy = Enemy1()
+                            DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, 100)
+                        elif choice_enemy == 2:
+                            enemy = Enemy2()
+                            DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, -20)
+                        spider_song.play(loops=-1)
+
+                        enemy_text = small_font.render(f'На вас напал: {enemy.get_name()}', True, 'white')
+                        big_text = big_font.render('НАЖМИТЕ [ПРОБЕЛ] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
+
+                    if enemy.get_is_attacking():
+                        if choice_attack == 1:
+                            enemy.attack01()
+                        if choice_attack == 2:
+                            enemy.attack02()
+
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    print(pygame.mouse.get_pos())
+
+
+            elif form1 == '':
+
+                sett.screen.fill((194, 197, 170))
+                sett.screen.blit(player_stand, player_stand_rect)
+                    #   sett.screen.blit(button_stand, button_stand_rect)
+
+                keys = pygame.key.get_pressed()
+
+                score_message = test_font.render(f'Your score: {sett.score}', False, (111, 196, 169))
+                score_message_rect = score_message.get_rect(center=(400, 380))
+                sett.screen.blit(game_name, game_name_rect)
+
+                if sett.score == 0:
+                    sett.screen.blit(game_message, game_message_rect)
+                    button = pygame.draw.rect(sett.screen, (65, 72, 51), (200, 350, 400, 80), 4)
+
+
+
+            else:
+                sett.screen.fill((194, 197, 170))
+                form1.update()
+                form1.show()
+
+
+
 
     if sett.log_in:
         app = QApplication(sys.argv)
@@ -144,8 +176,6 @@ while True:
         sys.excepthook = except_hook
         form.show()
         sett.log_in = False
-        # info = True
-#    print(sett.info)
     if sett.info:
         app1 = QApplication(sys.argv)
         form1 = Info(form.name)
@@ -153,30 +183,29 @@ while True:
         sett.info = False
 
     if sett.game_active:
+        sett.screen.fill((194, 197, 170))
+        heart.hp = 5
+     #   sett.screen = pygame.display.set_mode((800, 600))
+
+      #  sett.update()
         form1.hide()
-        screen.blit(form1.sky_surface, (0, 0))
+        sett.screen.blit(form1.sky_surface, (0, 0))
 
         sett.score = display_score()
         form1.start_time = 0
         sett.game_active = collision_sprite()
 
-        obstacle_group.draw(screen)
-        player.draw(screen)
-        board_group.draw(screen)
-        coins_group.draw(screen)
-
+        obstacle_group.draw(sett.screen)
+        player.draw(sett.screen)
+        board_group.draw(sett.screen)
+        coins_group.draw(sett.screen)
 
         player.update()
         obstacle_group.update()
         board_group.update()
         coins_group.update()
 
-        screen.blit(form1.ground_surface, (0, 400))
-
-      #  board_up_group.draw(screen)
-        #board_up_group.update()
-
-  #      sett.game_active = collision_sprite()
+        sett.screen.blit(form1.ground_surface, (0, 400))
 
 
         pink_girl.update()
@@ -193,31 +222,113 @@ while True:
 
         coin.update()
 
+    if sett.running:
+     #   sett.screen = pygame.display.set_mode((1200, 800))
+      #  sett.update()
+        keys = pygame.key.get_pressed()
+        print(keys[pygame.K_SPACE])
+        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+            player_und.update('left')
+        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+            player_und.update('right')
+        if keys[pygame.K_UP] or keys[pygame.K_w]:
+            player_und.update('up')
+        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+            player_und.update('down')
 
+        if keys[pygame.K_q] and player_und_attacking:
+            draw_attack_bar = True
+            player_und_attacking = False
+            enemy_attack_time = False
+            big_text = big_font.render('НАЖМИТЕ [E] КАК МОЖНО БЛИЖЕ К ЦЕНТРУ', True, 'white')
+        if keys[pygame.K_e] and draw_attack_bar:
+            draw_attack_bar = False
+            big_text = big_font.render('НАЖМИТЕ [ПРОБЕЛ] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
+            enemy_attack_time = True
+            line.reset()
+            damage = ((line.get_x() + 335) // 53) * 2
+            if damage > 10:
+                damage -= (40 - damage)
+            enemy.set_hp(enemy.get_hp() - damage)
+            damage_text = small_font.render(f'ВЫ НАНЕСЛИ {damage} УРОНА', True, 'white')
+        if keys[pygame.K_SPACE] and not enemy.get_is_attacking() and enemy_attack_time:
+            enemy.set_is_attacking(True)
+            choice_attack = r.randint(1, 2)
+            big_text = big_font.render('', True, 'white')
+            enemy_attack_time = False
+            damage_text = small_font.render(f'', True, 'white')
+        if heart.get_x() < box_x:
+            heart.set_x(box_x + 2)
+        if heart.get_x() > box_x + box_width - heart_width:
+            heart.set_x(box_x + box_width - heart_width - 2)
+        if heart.get_y() < box_y:
+            heart.set_y(box_y + 2)
+        if heart.get_y() > box_y + box_height - heart_height:
+            heart.set_y(box_y + box_height - heart_height - 2)
+      #  pygame.draw.rect(sett.screen, 'white', (box_x, box_y, box_width, box_height), 0)
 
+        ban_attack = []
+        for i in attack1:
+            if i.get_name() == 'peaks':
+                if i.get_vector() == 'down' and i.rect.y >= 270:
+                    ban_attack.append(i)
+                elif i.get_vector() == 'up' and i.rect.y <= box_y:
+                    ban_attack.append(i)
+                elif i.get_vector() == 'right' and i.rect.x >= box_x + 170:
+                    ban_attack.append(i)
+                elif i.get_vector() == 'left' and i.rect.x <= box_x:
+                    ban_attack.append(i)
 
-    else:
-        if form1 == '':
-            screen.fill((194, 197, 170))
-            screen.blit(player_stand, player_stand_rect)
-            #   screen.blit(button_stand, button_stand_rect)
+            elif i.get_name() == 'bone':
+                if i.get_vector() == 'right' and i.rect.x >= box_x + 195:
+                    ban_attack.append(i)
+                elif i.get_vector() == 'left' and i.rect.x <= box_x:
+                    ban_attack.append(i)
 
-            keys = pygame.key.get_pressed()
+            elif i.get_name() == 'ball':
+                if i.get_broken() >= 15:
+                    ban_attack.append(i)
 
+            elif i.get_name() == 'block':
+                if i.get_is_ban():
+                    ban_attack.append(i)
+                    tetris = [[0] * 10 for i in range(3)]
+        for i in ban_attack:
+            attack1.remove(i)
 
-            score_message = test_font.render(f'Your score: {sett.score}', False, (111, 196, 169))
-            score_message_rect = score_message.get_rect(center=(400, 380))
-            screen.blit(game_name, game_name_rect)
+        if before_len_attack != 0 and len(attack1) == 0:
+            enemy.end_attack()
+            enemy.set_is_attacking(False)
+            before_len_attack = 0
+            big_text = big_font.render(f'НАЖМИТЕ [Q] ЧТО БЫ АТАКОВАТЬ', True, 'white')
+            player_und_attacking = True
 
-            if sett.score == 0:
-                screen.blit(game_message, game_message_rect)
-                button = pygame.draw.rect(screen, (65, 72, 51), (200, 350, 400, 80), 4)
-
-            else:
-                screen.blit(score_message, score_message_rect)
         else:
-            form1.update()
-            form1.show()
+            before_len_attack = len(attack1)
+
+        if draw_attack_bar:
+            attack_bar_group.draw(sett.screen)
+            line_group.update()
+            line_group.draw(sett.screen)
+        sett.screen.fill('black')
+        enemy_hp = small_font.render(f'HP {enemy.get_name()}: {enemy.get_hp()}/20',
+                                     True, 'white')
+        player_und_hp = small_font.render(f'ВАШИ HP: {heart.get_hp()}', True, 'white')
+
+        player_und.draw(sett.screen)
+        attack1.draw(sett.screen)
+        enemy_sprite.draw(sett.screen)
+        pygame.draw.rect(sett.screen, 'white', (box_x, box_y, box_width, box_height), 2)
+        heart.heat()
+
+        attack1.update()
+        enemy_sprite.update()
+
+        sett.screen.blit(enemy_text, (50, 50))
+        sett.screen.blit(big_text, (100, 700))
+        sett.screen.blit(damage_text, (470, 520))
+        sett.screen.blit(enemy_hp, (730, 310))
+        sett.screen.blit(player_und_hp, (730, 480))
 
     pygame.display.flip()
     pygame.display.update()

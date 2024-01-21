@@ -1,5 +1,6 @@
 from load_image import load_image
 import pygame
+#from settings import *
 class Bool:
     def __init__(self):
         self.game_active = False
@@ -27,5 +28,19 @@ class Bool:
                     res += elem
             self.level.append(res)
         self.activate_levels = 1
+        self.running = False
+
+        self.screen = pygame.display.set_mode((1200, 800))
+
+
+    def update(self):
+        if self.running:
+            pass
+
+        if self.game_active:
+            self.screen = pygame.display.set_mode((1200, 800))
+        else:
+            self.screen = pygame.display.set_mode((1200, 800))
+
 
 sett = Bool()
