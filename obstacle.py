@@ -1,7 +1,4 @@
-import pygame
 from random import randint
-from load_image import load_image
-from sprites import AnimatedSprite
 from settings import *
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, type):
@@ -42,7 +39,7 @@ class Obstacle(pygame.sprite.Sprite):
 
     def update(self):
         self.animation_state()
-        self.rect.x -= 10
+        self.rect.x -= 5
         self.destroy()
 
     def destroy(self):

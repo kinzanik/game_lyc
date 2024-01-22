@@ -1,6 +1,8 @@
 import pygame
 from load_image import load_image
 from bool import *
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, skin):
         super().__init__()
