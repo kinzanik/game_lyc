@@ -43,34 +43,41 @@ class Login(QMainWindow):
         print(self.passw)
         if self.user_lineEdit.text() in self.users:
             if self.passw_lineEdit.text() == str(self.dict[self.user_lineEdit.text()]):
-             #   self.res_Label.setText(f'Вы вошли в свой аккаунт, <br>можете закрыть окно</br>')
-              #  self.name = self.user_lineEdit.text()
+                self.res_Label.setText(f'Вы вошли в свой аккаунт, <br>можете закрыть окно</br>')
+                self.name = self.user_lineEdit.text()
                 print('вы вошли в свой аккаунт')
-                reply = QMessageBox.question(
-                    self,
-                    'Информация',
-                    'Вы уверены, что хотите закрыть окно?',
-                    QMessageBox.Yes)
-                if reply == QMessageBox.Yes:
-                    self.close()
             else:
                 self.res_Label.setText('Неверный пароль')
                 print('неверный пароль')
         else:
             self.res_Label.setText('Вы не зарегестрированы')
             print('Вы не зарегестрированы')
-        #    pass
+            #    pass
         print(self.users)
 
-    def closeEvent(self, event):
-            event.accept()
-            sett.info = True
+        def closeEvent(self, event):
+            if self.name != '':
+                reply = QMessageBox.question(
+                    self,
+                    'Информация',
+                    'Вы уверены, что хотите закрыть окно?',
+                    QMessageBox.Yes,
+                    QMessageBox.No)
+            else:
+                reply = QMessageBox.question(
+                    self,
+                    'Информация',
+                    'Вы не можете продолжить работу, пока не войдете в свой аккаунт',
+                    QMessageBox.No)
+            if reply == QMessageBox.Yes:
+                event.accept()
+                sett.info = True
+
+            else:
+                event.ignore()
 
 
-
-
-
-    def sign(self):
+def sign(self):
         self.signup_form = SignUp()
         self.signup_form.show()
         self.con.commit()
