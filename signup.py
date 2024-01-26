@@ -31,7 +31,7 @@ class SignUp(QMainWindow):
             self.res_label.setText('Пользователь с таким именем уже существует')
         else:
             self.cur.execute(f'''INSERT INTO login VALUES('{self.user_lineEdit.text()}',
-'{self.passw_lineEdit.text()}')''')
+'{self.passw_lineEdit.text()}', 0, 0, 0, 0, 1)''')
             self.con.commit()
             self.res_label.setText('Вы зарегистрировалась, можете закрыть <br>это окно и войти в свой аккаунт</br>')
 

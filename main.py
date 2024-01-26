@@ -10,6 +10,10 @@ from coins import Coins
 from PyQt5.QtWidgets import QApplication
 from lyc import *
 
+from would_u import WouldYou
+
+
+
 
 def except_hook(cls, exception, traceback):
     sys.__excepthook__(cls, exception, traceback)
@@ -18,18 +22,24 @@ def except_hook(cls, exception, traceback):
 def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - sett.start_time
     score_surf = test_font.render(f'Score: {current_time}', False, (64, 64, 64))
-    score_rect = score_surf.get_rect(center=(400, 50))
+    score_rect = score_surf.get_rect(center=(600, 50))
     sett.screen.blit(score_surf, score_rect)
 
     coin_surf = coins_font.render(f'coins: {sett.count_coins}', False, (64, 64, 64))
-    coin_rect = score_surf.get_rect(center=(700, 50))
+    coin_rect = score_surf.get_rect(center=(900, 50))
     sett.screen.blit(coin_surf, coin_rect)
     return current_time
 
 
 def collision_sprite():
     if pygame.sprite.spritecollide(player.sprite, obstacle_group, False):
-        sett.running = True
+        if sett.first_would == 0:
+            sett.would = True
+            sett.first_would += 1
+        else:
+            sett.form2.show()
+            sett.perehod = True
+
         obstacle_group.empty()
         board_group.empty()
         board_up_group.empty()
@@ -52,7 +62,7 @@ def collision_sprite():
 
 
 
-form1 = ''
+sett.form1 = ''
 
 
 
@@ -63,7 +73,7 @@ while True:
             exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(event.pos)
-            if 200 <= event.pos[0] <= 597 and 350 <= event.pos[1] <= 426:
+            if 401 <= event.pos[0] <= 818 and 350 <= event.pos[1] <= 425:
                 sett.log_in = True
 
         if sett.game_active:
@@ -72,7 +82,7 @@ while True:
                 activate = False
               #  sett.count_level = 0
                 sett.game_active = False
-                form1.show()
+                sett.form1.show()
                 obstacle_group.empty()
                 board_group.empty()
             if event.type == obstacle_timer:
@@ -105,7 +115,7 @@ while True:
                         ex = Board(board)
                         board_group.add(ex)
                     if obs[1] == 'f':
-                        form1.level.append(str(len(form1.level) + 1))
+                        sett.form1.level.append(str(len(sett.form1.level) + 1))
 
                     if obs[2] == 'no':
                         pass
@@ -117,6 +127,7 @@ while True:
 
         else:
             if sett.running:
+                sett.form1.hide()
                 if event.type == pike:
                     a += 1
                     if a == 2:
@@ -142,7 +153,7 @@ while True:
                     print(pygame.mouse.get_pos())
 
 
-            elif form1 == '':
+            elif sett.form1 == '':
 
                 sett.screen.fill((194, 197, 170))
                 sett.screen.blit(player_stand, player_stand_rect)
@@ -156,14 +167,17 @@ while True:
 
                 if sett.score == 0:
                     sett.screen.blit(game_message, game_message_rect)
-                    button = pygame.draw.rect(sett.screen, (65, 72, 51), (200, 350, 400, 80), 4)
+                    button = pygame.draw.rect(sett.screen, (65, 72, 51), (400, 350, 420, 80), 4)
 
 
-
+            elif sett.perehod:
+                sett.screen.fill((194, 197, 170))
+                sett.form1.hide()
             else:
                 sett.screen.fill((194, 197, 170))
-                form1.update()
-                form1.show()
+                sett.form1.update()
+                if not sett.perehod:
+                    sett.form1.show()
 
 
 
@@ -176,9 +190,17 @@ while True:
         sett.log_in = False
     if sett.info:
         app1 = QApplication(sys.argv)
-        form1 = Info(form.name)
-        form1.show()
+        sett.form1 = Info(form.name)
+        sett.form1.show()
         sett.info = False
+
+    if sett.would:
+        sett.form1.hide()
+        app2 = QApplication(sys.argv)
+        sett.form2 = WouldYou()
+        sett.form2.show()
+        sett.would = False
+        sett.perehod = True
 
     if sett.game_active:
         sett.screen.fill((194, 197, 170))
@@ -186,11 +208,11 @@ while True:
      #   sett.screen = pygame.display.set_mode((800, 600))
 
       #  sett.update()
-        form1.hide()
-        sett.screen.blit(form1.sky_surface, (0, 0))
+        sett.form1.hide()
+        sett.screen.blit(sett.form1.sky_surface, (0, 0))
 
         sett.score = display_score()
-        form1.start_time = 0
+        sett.form1.start_time = 0
         sett.game_active = collision_sprite()
 
         obstacle_group.draw(sett.screen)
@@ -203,7 +225,7 @@ while True:
         board_group.update()
         coins_group.update()
 
-        sett.screen.blit(form1.ground_surface, (0, 400))
+        sett.screen.blit(sett.form1.ground_surface, (0, 600))
 
 
         pink_girl.update()

@@ -2,8 +2,6 @@ import os
 import sys
 import pygame
 all_sprites = pygame.sprite.Group()
-
-
 def load_image(name, colorkey=None):
     if not os.path.isfile(name):
         print(f"Файл с изображением '{name}' не найден")

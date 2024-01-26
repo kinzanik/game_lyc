@@ -28,13 +28,18 @@ class Info(QMainWindow):
 
         self.level = self.cur.execute(f"""SELECT level FROM login
                                                     WHERE username = '{self.name}'""").fetchone()[0]
+
+     #   self.level = list(self.level)
         if self.level == 1:
             self.level = ['1']
         else:
-            self.level.split(',')
+            print(self.level)
+            self.level = self.level.split(',')
+            print(self.level)
 
 
         print(type(self.level))
+    #    print(self.level)
         self.level_label.setText(f'Levels: {len(self.level)}')
         self.all_levels_count = len(self.level)
 

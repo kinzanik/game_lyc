@@ -31,6 +31,10 @@ class Bool:
         self.running = False
 
         self.screen = pygame.display.set_mode((1200, 800))
+        self.form1 = ''
+        self.would = False
+        self.first_would = 0
+        self.perehod = False
 
 
     def update(self):

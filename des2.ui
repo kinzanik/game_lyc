@@ -136,8 +136,8 @@ color: rgb(65, 72, 51)</string>
    <widget class="QPushButton" name="choose_Button">
     <property name="geometry">
      <rect>
-      <x>380</x>
-      <y>230</y>
+      <x>620</x>
+      <y>450</y>
       <width>221</width>
       <height>31</height>
      </rect>
@@ -148,7 +148,7 @@ background-color: rgb(194, 197, 170);
 color: rgb(65, 72, 51)</string>
     </property>
     <property name="text">
-     <string>choose this character</string>
+     <string>save changes</string>
     </property>
    </widget>
    <widget class="QLabel" name="back_label">

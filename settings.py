@@ -7,7 +7,7 @@ from bool import sett
 
 pygame.init()
 
-pygame.display.set_caption('Ам Ням в Политехе')
+pygame.display.set_caption("forest's secrets")
 clock = pygame.time.Clock()
 test_font = pygame.font.Font('font/EightBits.ttf', 50)
 coins_font = pygame.font.Font('font/EightBits.ttf', 40)
@@ -80,7 +80,7 @@ all_skins = ['player', 'player1', 'player2']
 
 player_stand = fairy_jump.frames[fairy_jump.cur_frame]
 player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
-player_stand_rect = player_stand.get_rect(center=(400, 260))
+player_stand_rect = player_stand.get_rect(center=(600, 260))
 
 
 
@@ -88,10 +88,10 @@ player_stand_rect = player_stand.get_rect(center=(400, 260))
 
 
 game_name = test_font.render("forest's secrets", False, (65, 72, 51))
-game_name_rect = game_name.get_rect(center=(400, 150))
+game_name_rect = game_name.get_rect(center=(600, 150))
 
 game_message = test_font.render('Log in', False, (65, 72, 51))
-game_message_rect = game_message.get_rect(center=(400, 380))
+game_message_rect = game_message.get_rect(center=(600, 380))
 
 #button = pygame.draw.rect(screen, (111, 196, 169), (300,400, 400, 450), 4)
 

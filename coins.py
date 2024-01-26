@@ -10,7 +10,7 @@ class Coins(pygame.sprite.Sprite):
 
         self.data = type
         if type == coin:
-            y_pos = randint(200, 400)
+            y_pos = randint(400, 600)
 
 
         elif type == white_bird:
@@ -20,7 +20,7 @@ class Coins(pygame.sprite.Sprite):
             snail_1 = pygame.image.load('graphics/diplom.png').convert_alpha()
             snail_2 = pygame.image.load('graphics/diplom.png').convert_alpha()
             self.frames = [snail_1, snail_2]
-            y_pos = 400
+            y_pos = 600
 
 
         self.image = self.data.frames[self.data.cur_frame]

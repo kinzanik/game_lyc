@@ -5,13 +5,13 @@ class Board(pygame.sprite.Sprite):
     def __init__(self, type):
         super().__init__()
         self.type = type
-        self.y_pos = 200
+        self.y_pos = 400
 
 
         if type == board:
-            self.y_pos = 200
+            self.y_pos = 400
         elif type == grass:
-            self.y_pos = 700
+            self.y_pos = 800
         self.animation_index = 0
         self.image = self.type = type
         if type == grass:
