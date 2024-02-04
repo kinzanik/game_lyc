@@ -12,6 +12,7 @@ from PyQt5 import uic
 from PyQt5.QtGui import QPixmap
 from settings import *
 import pygame
+import common
 
 class Info(QMainWindow):
     def __init__(self, name):
@@ -80,6 +81,7 @@ class Info(QMainWindow):
         self.choose_Button.clicked.connect(self.choose)
         self.next_Button.clicked.connect(self.next)
         self.back_Button.clicked.connect(self.back)
+        self.morecoins_Button.clicked.connect(self.more_coins)
 
 
 
@@ -99,25 +101,40 @@ class Info(QMainWindow):
 
 
     def update(self):
-        if sett.score > int(self.record):
+        if sett.score > int(self.record) and not sett.mini_game:
             self.record = sett.score
             self.cur.execute(f"""UPDATE login
                              SET record = '{self.record}'
                             WHERE username = '{self.name}'""")
             self.con.commit()
             self.record_label.setText(f'Record:  {self.record}')
-        self.coins = str(sett.count_coins)
-        self.coins_label.setText(f'Coins:  {self.coins}')
-        self.cur.execute(f"""UPDATE login
-                                     SET coins = '{self.coins}'
-                                    WHERE username = '{self.name}'""")
+            self.coins = str(sett.count_coins)
+            self.coins_label.setText(f'Coins:  {self.coins}')
+            self.cur.execute(f"""UPDATE login
+                                         SET coins = '{self.coins}'
+                                        WHERE username = '{self.name}'""")
 
         if sett.all_levels_count < len(self.level):
            sett.all_levels_count = len(self.level)
            self.cur.execute(f"""UPDATE login
                                         SET level = '{','.join(self.level)}'
                                         WHERE username = '{self.name}'""")
+
+
+        elif sett.mini_game:
+            print(int(self.coins))
+            print(int(sett.score_coins))
+            self.coins = int(self.coins)
+            self.coins += int(sett.score_coins)
+            self.coins = str(self.coins)
+            self.coins_label.setText(f'Coins:  {self.coins}')
+            self.cur.execute(f"""UPDATE login
+                                                SET coins = '{self.coins}'
+                                               WHERE username = '{self.name}'""")
+            sett.mini_game = False
+
         self.con.commit()
+
 
 
 
@@ -209,6 +226,12 @@ class Info(QMainWindow):
                 sett.level.append(res)
         else:
             pass
+
+    def more_coins(self):
+        common.function()
+        sett.mini_game = True
+
+
 
 
 

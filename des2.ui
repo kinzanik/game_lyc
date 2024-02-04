@@ -217,6 +217,24 @@ color: rgb(65, 72, 51)</string>
      <string>back</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="morecoins_Button">
+    <property name="geometry">
+     <rect>
+      <x>530</x>
+      <y>230</y>
+      <width>301</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">font: 75 14pt &quot;Palatino Linotype&quot;;
+background-color: rgb(194, 197, 170);
+color: rgb(65, 72, 51)</string>
+    </property>
+    <property name="text">
+     <string>want more coins?</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

@@ -1,0 +1,19 @@
+hor,--,no
+lb,--,no
+w,--,no
+vv,--,no
+b, --,no
+v,-,coin
+lb,-,no
+b,--,coin
+v,--,no
+lb,--,coin
+wol,--,no
+w,--,no
+lb,-,coin
+v,-,no
+b,--,no
+vv,--,no
+hor,--,no
+hor,--,coin
+f,f,no

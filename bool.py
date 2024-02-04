@@ -32,9 +32,14 @@ class Bool:
 
         self.screen = pygame.display.set_mode((1200, 800))
         self.form1 = ''
+        self.form = ''
         self.would = False
         self.first_would = 0
         self.perehod = False
+
+        self.score_coins = 0
+
+        self.mini_game = False
 
 
     def update(self):

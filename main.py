@@ -71,10 +71,14 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            print(event.pos)
-            if 401 <= event.pos[0] <= 818 and 350 <= event.pos[1] <= 425:
-                sett.log_in = True
+        if sett.form1 == '':
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(event.pos)
+                if 401 <= event.pos[0] <= 818 and 350 <= event.pos[1] <= 425:
+                    if sett.form == '':
+                        sett.log_in = True
+                    else:
+                        sett.form.show()
 
         if sett.game_active:
 
@@ -184,13 +188,13 @@ while True:
 
     if sett.log_in:
         app = QApplication(sys.argv)
-        form = Login()
+        sett.form = Login()
         sys.excepthook = except_hook
-        form.show()
+        sett.form.show()
         sett.log_in = False
     if sett.info:
         app1 = QApplication(sys.argv)
-        sett.form1 = Info(form.name)
+        sett.form1 = Info(sett.form.name)
         sett.form1.show()
         sett.info = False
 
