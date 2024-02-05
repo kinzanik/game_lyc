@@ -400,7 +400,7 @@ attack1 = pygame.sprite.Group()
 tetris = [[0] * 10 for i in range(3)]
 
 
-def main():
+def undertale():
     player = pygame.sprite.Group()
     enemy_sprite = pygame.sprite.Group()
     attack_bar_group = pygame.sprite.Group()
@@ -589,4 +589,4 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    undertale()
