@@ -400,7 +400,7 @@ attack1 = pygame.sprite.Group()
 tetris = [[0] * 10 for i in range(3)]
 
 
-def undertale():
+def main():
     player = pygame.sprite.Group()
     enemy_sprite = pygame.sprite.Group()
     attack_bar_group = pygame.sprite.Group()
@@ -428,11 +428,18 @@ def undertale():
     before_len_attack = 0
     running = True
 
-    tetris = [[0] * 10 for i in range(3)]
+    global tetris
 
     while running:
         screen.fill('black')
-
+        if heart.get_hp() <= 0:
+            attack1.empty()
+            spider_song.stop()
+            return 'lose'
+        elif enemy.get_hp() <= 0:
+            attack1.empty()
+            spider_song.stop()
+            return 'win'
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -453,7 +460,7 @@ def undertale():
                     spider_song.play(loops=-1)
 
                     enemy_text = small_font.render(f'На вас напал: {enemy.get_name()}', True, 'white')
-                    big_text = big_font.render('НАЖМИТЕ [ПРОБЕЛ] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
+                    big_text = big_font.render('НАЖМИТЕ [X] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
 
                 if enemy.get_is_attacking():
                     if choice_attack == 1:
@@ -480,18 +487,22 @@ def undertale():
             enemy_attack_time = False
             big_text = big_font.render('НАЖМИТЕ [E] КАК МОЖНО БЛИЖЕ К ЦЕНТРУ', True, 'white')
 
-        if keys[pygame.K_e] and draw_attack_bar:
+        if (keys[pygame.K_e] and draw_attack_bar) or (draw_attack_bar and line.get_x() >= 880):
             draw_attack_bar = False
-            big_text = big_font.render('НАЖМИТЕ [ПРОБЕЛ] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
+            big_text = big_font.render('НАЖМИТЕ [X] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
             enemy_attack_time = True
+            damage = 0
+            if line.get_x() in range(810, 900) or line.get_x() in range(330, 420):
+                damage = 1
+            elif line.get_x() in range(420, 520) or line.get_x() in range(700, 810):
+                damage = 3
+            elif line.get_x() in range(520, 700):
+                damage = 6
             line.reset()
-            damage = ((line.get_x() - 335) // 53) * 2
-            if damage > 10:
-                damage -= (40 - damage)
             enemy.set_hp(enemy.get_hp() - damage)
             damage_text = small_font.render(f'ВЫ НАНЕСЛИ {damage} УРОНА', True, 'white')
 
-        if keys[pygame.K_SPACE] and not enemy.get_is_attacking() and enemy_attack_time:
+        if keys[pygame.K_x] and not enemy.get_is_attacking() and enemy_attack_time:
             enemy.set_is_attacking(True)
             choice_attack = r.randint(1, 2)
             big_text = big_font.render('', True, 'white')
@@ -578,4 +589,4 @@ def undertale():
 
 
 if __name__ == '__main__':
-    undertale()
+    main()
