@@ -96,7 +96,10 @@ class Info(QMainWindow):
         sett.pl = Player(self.skin)
         player.add(sett.pl)
         sett.count_level = 0
+        print(sett.game_active)
+        sett.running = False
         sett.game_active = True
+        print(sett.game_active)
         sett.start_time = int(pygame.time.get_ticks() / 1000)
 
 

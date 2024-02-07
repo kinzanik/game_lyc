@@ -9,6 +9,7 @@ from coins import Coins
 
 from PyQt5.QtWidgets import QApplication
 from lyc import *
+import undertale
 
 from would_u import WouldYou
 
@@ -62,16 +63,17 @@ def collision_sprite():
 
 
 
-sett.form1 = ''
+sett.form1 = 'l'
 
 
 
 while True:
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        if sett.form1 == '':
+        if sett.form1 == 'l':
             if event.type == pygame.MOUSEBUTTONDOWN:
                 print(event.pos)
                 if 401 <= event.pos[0] <= 818 and 350 <= event.pos[1] <= 425:
@@ -129,59 +131,33 @@ while True:
                 except IndexError:
                     pass
 
-        else:
-            if sett.running:
-                sett.form1.hide()
-                if event.type == pike:
-                    a += 1
-                    if a == 2:
-                        choice_enemy = r.randint(1, 2)
-                        if choice_enemy == 1:
-                            enemy = Enemy1()
-                            DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, 100)
-                        elif choice_enemy == 2:
-                            enemy = Enemy2()
-                            DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, -20)
-                        spider_song.play(loops=-1)
 
-                        enemy_text = small_font.render(f'На вас напал: {enemy.get_name()}', True, 'white')
-                        big_text = big_font.render('НАЖМИТЕ [ПРОБЕЛ] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
+        elif sett.form1 == 'l':
+            print(sett.form1)
 
-                    if enemy.get_is_attacking():
-                        if choice_attack == 1:
-                            enemy.attack01()
-                        if choice_attack == 2:
-                            enemy.attack02()
-
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                    print(pygame.mouse.get_pos())
-
-
-            elif sett.form1 == '':
-
-                sett.screen.fill((194, 197, 170))
-                sett.screen.blit(player_stand, player_stand_rect)
+            sett.screen.fill((194, 197, 170))
+            sett.screen.blit(player_stand, player_stand_rect)
                     #   sett.screen.blit(button_stand, button_stand_rect)
 
-                keys = pygame.key.get_pressed()
+            keys = pygame.key.get_pressed()
 
-                score_message = test_font.render(f'Your score: {sett.score}', False, (111, 196, 169))
-                score_message_rect = score_message.get_rect(center=(400, 380))
-                sett.screen.blit(game_name, game_name_rect)
+            score_message = test_font.render(f'Your score: {sett.score}', False, (111, 196, 169))
+            score_message_rect = score_message.get_rect(center=(400, 380))
+            sett.screen.blit(game_name, game_name_rect)
 
-                if sett.score == 0:
-                    sett.screen.blit(game_message, game_message_rect)
-                    button = pygame.draw.rect(sett.screen, (65, 72, 51), (400, 350, 420, 80), 4)
+            if sett.score == 0:
+                sett.screen.blit(game_message, game_message_rect)
+                button = pygame.draw.rect(sett.screen, (65, 72, 51), (400, 350, 420, 80), 4)
 
 
-            elif sett.perehod:
-                sett.screen.fill((194, 197, 170))
-                sett.form1.hide()
-            else:
-                sett.screen.fill((194, 197, 170))
-                sett.form1.update()
-                if not sett.perehod:
-                    sett.form1.show()
+        elif sett.perehod:
+            sett.screen.fill((194, 197, 170))
+            sett.form1.hide()
+        else:
+            sett.screen.fill((194, 197, 170))
+            sett.form1.update()
+            if not sett.perehod:
+                sett.form1.show()
 
 
 
@@ -208,7 +184,7 @@ while True:
 
     if sett.game_active:
         sett.screen.fill((194, 197, 170))
-        heart.hp = 5
+
      #   sett.screen = pygame.display.set_mode((800, 600))
 
       #  sett.update()
@@ -247,112 +223,11 @@ while True:
         coin.update()
 
     if sett.running:
-     #   sett.screen = pygame.display.set_mode((1200, 800))
-      #  sett.update()
-        keys = pygame.key.get_pressed()
-        print(keys[pygame.K_SPACE])
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            player_und.update('left')
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            player_und.update('right')
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            player_und.update('up')
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            player_und.update('down')
+        a = undertale.under()
 
-        if keys[pygame.K_q] and player_und_attacking:
-            draw_attack_bar = True
-            player_und_attacking = False
-            enemy_attack_time = False
-            big_text = big_font.render('НАЖМИТЕ [E] КАК МОЖНО БЛИЖЕ К ЦЕНТРУ', True, 'white')
-        if keys[pygame.K_e] and draw_attack_bar:
-            draw_attack_bar = False
-            big_text = big_font.render('НАЖМИТЕ [ПРОБЕЛ] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
-            enemy_attack_time = True
-            line.reset()
-            damage = ((line.get_x() + 335) // 53) * 2
-            if damage > 10:
-                damage -= (40 - damage)
-            enemy.set_hp(enemy.get_hp() - damage)
-            damage_text = small_font.render(f'ВЫ НАНЕСЛИ {damage} УРОНА', True, 'white')
-        if keys[pygame.K_SPACE] and not enemy.get_is_attacking() and enemy_attack_time:
-            enemy.set_is_attacking(True)
-            choice_attack = r.randint(1, 2)
-            big_text = big_font.render('', True, 'white')
-            enemy_attack_time = False
-            damage_text = small_font.render(f'', True, 'white')
-        if heart.get_x() < box_x:
-            heart.set_x(box_x + 2)
-        if heart.get_x() > box_x + box_width - heart_width:
-            heart.set_x(box_x + box_width - heart_width - 2)
-        if heart.get_y() < box_y:
-            heart.set_y(box_y + 2)
-        if heart.get_y() > box_y + box_height - heart_height:
-            heart.set_y(box_y + box_height - heart_height - 2)
-      #  pygame.draw.rect(sett.screen, 'white', (box_x, box_y, box_width, box_height), 0)
 
-        ban_attack = []
-        for i in attack1:
-            if i.get_name() == 'peaks':
-                if i.get_vector() == 'down' and i.rect.y >= 270:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'up' and i.rect.y <= box_y:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'right' and i.rect.x >= box_x + 170:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'left' and i.rect.x <= box_x:
-                    ban_attack.append(i)
 
-            elif i.get_name() == 'bone':
-                if i.get_vector() == 'right' and i.rect.x >= box_x + 195:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'left' and i.rect.x <= box_x:
-                    ban_attack.append(i)
 
-            elif i.get_name() == 'ball':
-                if i.get_broken() >= 15:
-                    ban_attack.append(i)
-
-            elif i.get_name() == 'block':
-                if i.get_is_ban():
-                    ban_attack.append(i)
-                    tetris = [[0] * 10 for i in range(3)]
-        for i in ban_attack:
-            attack1.remove(i)
-
-        if before_len_attack != 0 and len(attack1) == 0:
-            enemy.end_attack()
-            enemy.set_is_attacking(False)
-            before_len_attack = 0
-            big_text = big_font.render(f'НАЖМИТЕ [Q] ЧТО БЫ АТАКОВАТЬ', True, 'white')
-            player_und_attacking = True
-
-        else:
-            before_len_attack = len(attack1)
-
-        if draw_attack_bar:
-            attack_bar_group.draw(sett.screen)
-            line_group.update()
-            line_group.draw(sett.screen)
-        sett.screen.fill('black')
-        enemy_hp = small_font.render(f'HP {enemy.get_name()}: {enemy.get_hp()}/20',
-                                     True, 'white')
-        player_und_hp = small_font.render(f'ВАШИ HP: {heart.get_hp()}', True, 'white')
-
-        player_und.draw(sett.screen)
-        attack1.draw(sett.screen)
-        enemy_sprite.draw(sett.screen)
-        pygame.draw.rect(sett.screen, 'white', (box_x, box_y, box_width, box_height), 2)
-        heart.heat()
-
-        attack1.update()
-        enemy_sprite.update()
-
-        sett.screen.blit(enemy_text, (50, 50))
-        sett.screen.blit(big_text, (100, 700))
-        sett.screen.blit(damage_text, (470, 520))
-        sett.screen.blit(enemy_hp, (730, 310))
-        sett.screen.blit(player_und_hp, (730, 480))
 
     pygame.display.flip()
     pygame.display.update()
