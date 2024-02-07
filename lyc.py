@@ -4,6 +4,7 @@ import pygame
 import random as r
 
 
+pygame.init()
 width, height = 1200, 800
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Undertale')
@@ -399,193 +400,198 @@ attack1 = pygame.sprite.Group()
 tetris = [[0] * 10 for i in range(3)]
 
 
-def undertale():
-    player = pygame.sprite.Group()
-    enemy_sprite = pygame.sprite.Group()
-    attack_bar_group = pygame.sprite.Group()
-    line_group = pygame.sprite.Group()
-    heart = Player(player)
-    a = 1
-    pike = pygame.USEREVENT
-    pygame.time.set_timer(pike, 200)
-    enemy = EmptyEnemy()
-    choice_attack = 0
-    attack_bar = AttackBar(attack_bar_group)
-    line = AttackLine(line_group)
+class Undertale:
+    def __init__(self):
+        pass
 
-    enemy_text = small_font.render('', True, 'white')
-    big_text = big_font.render('', True, 'white')
-    damage_text = small_font.render('', True, 'white')
-    enemy_hp = small_font.render('', True, 'white')
-    player_hp = small_font.render('', True, 'white')
+    def undertale(self):
+        player = pygame.sprite.Group()
+        enemy_sprite = pygame.sprite.Group()
+        attack_bar_group = pygame.sprite.Group()
+        line_group = pygame.sprite.Group()
+        heart = Player(player)
+        a = 1
+        pike = pygame.USEREVENT
+        pygame.time.set_timer(pike, 200)
+        enemy = EmptyEnemy()
+        choice_attack = 0
+        attack_bar = AttackBar(attack_bar_group)
+        line = AttackLine(line_group)
 
-    first_attack = False
-    player_attacking = False
-    draw_big_text = True
-    draw_attack_bar = False
-    enemy_attack_time = True
-    before_len_attack = 0
-    running = True
+        enemy_text = small_font.render('', True, 'white')
+        big_text = big_font.render('', True, 'white')
+        damage_text = small_font.render('', True, 'white')
+        enemy_hp = small_font.render('', True, 'white')
+        player_hp = small_font.render('', True, 'white')
 
-    global tetris
+        first_attack = False
+        player_attacking = False
+        draw_big_text = True
+        draw_attack_bar = False
+        enemy_attack_time = True
+        before_len_attack = 0
+        running = True
 
-    while running:
-        screen.fill('black')
-        if heart.get_hp() <= 0:
-            attack1.empty()
-            spider_song.stop()
-            return False
-        elif enemy.get_hp() <= 0:
-            attack1.empty()
-            spider_song.stop()
-            return True
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+        global tetris
+
+        while running:
+            screen.fill('black')
+            if heart.get_hp() <= 0:
                 attack1.empty()
                 spider_song.stop()
-                return
-                # pygame.quit()
-            if event.type == pike:
-                a += 1
-                if a == 2:
-                    choice_enemy = r.randint(1, 2)
-                    if choice_enemy == 1:
-                        enemy = Enemy1()
-                        DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, 100)
-                    elif choice_enemy == 2:
-                        enemy = Enemy2()
-                        DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, -20)
-                    # spider_song.play(loops=-1)`
+                return False
+            elif enemy.get_hp() <= 0:
+                attack1.empty()
+                spider_song.stop()
+                return True
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    attack1.empty()
+                    spider_song.stop()
+                    return
+                    # pygame.quit()
+                if event.type == pike:
+                    a += 1
+                    if a == 2:
+                        choice_enemy = r.randint(1, 2)
+                        if choice_enemy == 1:
+                            enemy = Enemy1()
+                            DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, 100)
+                        elif choice_enemy == 2:
+                            enemy = Enemy2()
+                            DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, -20)
+                        # spider_song.play(loops=-1)`
 
-                    enemy_text = small_font.render(f'На вас напал: {enemy.get_name()}', True, 'white')
-                    big_text = big_font.render('НАЖМИТЕ [X] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
+                        enemy_text = small_font.render(f'На вас напал: {enemy.get_name()}', True, 'white')
+                        big_text = big_font.render('НАЖМИТЕ [X] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
 
-                if enemy.get_is_attacking():
-                    if choice_attack == 1:
-                        enemy.attack01()
-                    if choice_attack == 2:
-                        enemy.attack02()
+                    if enemy.get_is_attacking():
+                        if choice_attack == 1:
+                            enemy.attack01()
+                        if choice_attack == 2:
+                            enemy.attack02()
 
-            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                print(pygame.mouse.get_pos())
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    print(pygame.mouse.get_pos())
 
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] or keys[pygame.K_a]:
-            player.update('left')
-        if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
-            player.update('right')
-        if keys[pygame.K_UP] or keys[pygame.K_w]:
-            player.update('up')
-        if keys[pygame.K_DOWN] or keys[pygame.K_s]:
-            player.update('down')
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+                player.update('left')
+            if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+                player.update('right')
+            if keys[pygame.K_UP] or keys[pygame.K_w]:
+                player.update('up')
+            if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+                player.update('down')
 
-        if keys[pygame.K_q] and player_attacking:
-            draw_attack_bar = True
-            player_attacking = False
-            enemy_attack_time = False
-            big_text = big_font.render('НАЖМИТЕ [E] КАК МОЖНО БЛИЖЕ К ЦЕНТРУ', True, 'white')
+            if keys[pygame.K_q] and player_attacking:
+                draw_attack_bar = True
+                player_attacking = False
+                enemy_attack_time = False
+                big_text = big_font.render('НАЖМИТЕ [E] КАК МОЖНО БЛИЖЕ К ЦЕНТРУ', True, 'white')
 
-        if (keys[pygame.K_e] and draw_attack_bar) or (draw_attack_bar and line.get_x() >= 880):
-            draw_attack_bar = False
-            big_text = big_font.render('НАЖМИТЕ [X] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
-            enemy_attack_time = True
-            damage = 0
-            if line.get_x() in range(810, 900) or line.get_x() in range(330, 420):
-                damage = 1
-            elif line.get_x() in range(420, 520) or line.get_x() in range(700, 810):
-                damage = 3
-            elif line.get_x() in range(520, 700):
-                damage = 6
-            line.reset()
-            enemy.set_hp(enemy.get_hp() - damage)
-            damage_text = small_font.render(f'ВЫ НАНЕСЛИ {damage} УРОНА', True, 'white')
+            if (keys[pygame.K_e] and draw_attack_bar) or (draw_attack_bar and line.get_x() >= 880):
+                draw_attack_bar = False
+                big_text = big_font.render('НАЖМИТЕ [X] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
+                enemy_attack_time = True
+                damage = 0
+                if line.get_x() in range(810, 900) or line.get_x() in range(330, 420):
+                    damage = 1
+                elif line.get_x() in range(420, 520) or line.get_x() in range(700, 810):
+                    damage = 3
+                elif line.get_x() in range(520, 700):
+                    damage = 6
+                line.reset()
+                enemy.set_hp(enemy.get_hp() - damage)
+                damage_text = small_font.render(f'ВЫ НАНЕСЛИ {damage} УРОНА', True, 'white')
 
-        if keys[pygame.K_x] and not enemy.get_is_attacking() and enemy_attack_time:
-            enemy.set_is_attacking(True)
-            choice_attack = r.randint(1, 2)
-            big_text = big_font.render('', True, 'white')
-            enemy_attack_time = False
-            damage_text = small_font.render(f'', True, 'white')
+            if keys[pygame.K_x] and not enemy.get_is_attacking() and enemy_attack_time:
+                enemy.set_is_attacking(True)
+                choice_attack = r.randint(1, 2)
+                big_text = big_font.render('', True, 'white')
+                enemy_attack_time = False
+                damage_text = small_font.render(f'', True, 'white')
 
-        if heart.get_x() < box_x:
-            heart.set_x(box_x + 2)
-        if heart.get_x() > box_x + box_width - heart_width:
-            heart.set_x(box_x + box_width - heart_width - 2)
-        if heart.get_y() < box_y:
-            heart.set_y(box_y + 2)
-        if heart.get_y() > box_y + box_height - heart_height:
-            heart.set_y(box_y + box_height - heart_height - 2)
-        pygame.draw.rect(screen, 'white', (box_x, box_y, box_width, box_height), 2)
+            if heart.get_x() < box_x:
+                heart.set_x(box_x + 2)
+            if heart.get_x() > box_x + box_width - heart_width:
+                heart.set_x(box_x + box_width - heart_width - 2)
+            if heart.get_y() < box_y:
+                heart.set_y(box_y + 2)
+            if heart.get_y() > box_y + box_height - heart_height:
+                heart.set_y(box_y + box_height - heart_height - 2)
+            pygame.draw.rect(screen, 'white', (box_x, box_y, box_width, box_height), 2)
 
-        ban_attack = []
-        for i in attack1:
-            if i.get_name() == 'peaks':
-                if i.get_vector() == 'down' and i.rect.y >= 270:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'up' and i.rect.y <= box_y:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'right' and i.rect.x >= box_x + 170:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'left' and i.rect.x <= box_x:
-                    ban_attack.append(i)
+            ban_attack = []
+            for i in attack1:
+                if i.get_name() == 'peaks':
+                    if i.get_vector() == 'down' and i.rect.y >= 270:
+                        ban_attack.append(i)
+                    elif i.get_vector() == 'up' and i.rect.y <= box_y:
+                        ban_attack.append(i)
+                    elif i.get_vector() == 'right' and i.rect.x >= box_x + 170:
+                        ban_attack.append(i)
+                    elif i.get_vector() == 'left' and i.rect.x <= box_x:
+                        ban_attack.append(i)
 
-            elif i.get_name() == 'bone':
-                if i.get_vector() == 'right' and i.rect.x >= box_x + 195:
-                    ban_attack.append(i)
-                elif i.get_vector() == 'left' and i.rect.x <= box_x:
-                    ban_attack.append(i)
+                elif i.get_name() == 'bone':
+                    if i.get_vector() == 'right' and i.rect.x >= box_x + 195:
+                        ban_attack.append(i)
+                    elif i.get_vector() == 'left' and i.rect.x <= box_x:
+                        ban_attack.append(i)
 
-            elif i.get_name() == 'ball':
-                if i.get_broken() >= 15:
-                    ban_attack.append(i)
+                elif i.get_name() == 'ball':
+                    if i.get_broken() >= 15:
+                        ban_attack.append(i)
 
-            elif i.get_name() == 'block':
-                if i.get_is_ban():
-                    ban_attack.append(i)
-                    tetris = [[0] * 10 for i in range(3)]
-        for i in ban_attack:
-            attack1.remove(i)
+                elif i.get_name() == 'block':
+                    if i.get_is_ban():
+                        ban_attack.append(i)
+                        tetris = [[0] * 10 for i in range(3)]
+            for i in ban_attack:
+                attack1.remove(i)
 
-        if before_len_attack != 0 and len(attack1) == 0:
-            enemy.end_attack()
-            enemy.set_is_attacking(False)
-            before_len_attack = 0
-            big_text = big_font.render(f'НАЖМИТЕ [Q] ЧТО БЫ АТАКОВАТЬ', True, 'white')
-            player_attacking = True
+            if before_len_attack != 0 and len(attack1) == 0:
+                enemy.end_attack()
+                enemy.set_is_attacking(False)
+                before_len_attack = 0
+                big_text = big_font.render(f'НАЖМИТЕ [Q] ЧТО БЫ АТАКОВАТЬ', True, 'white')
+                player_attacking = True
 
-        else:
-            before_len_attack = len(attack1)
+            else:
+                before_len_attack = len(attack1)
 
-        if draw_attack_bar:
-            attack_bar_group.draw(screen)
-            line_group.update()
-            line_group.draw(screen)
+            if draw_attack_bar:
+                attack_bar_group.draw(screen)
+                line_group.update()
+                line_group.draw(screen)
 
-        enemy_hp = small_font.render(f'HP {enemy.get_name()}: {enemy.get_hp()}/20',
-                                     True, 'white')
-        player_hp = small_font.render(f'ВАШИ HP: {heart.get_hp()}', True, 'white')
+            enemy_hp = small_font.render(f'HP {enemy.get_name()}: {enemy.get_hp()}/20',
+                                         True, 'white')
+            player_hp = small_font.render(f'ВАШИ HP: {heart.get_hp()}', True, 'white')
 
-        player.draw(screen)
-        attack1.draw(screen)
-        enemy_sprite.draw(screen)
+            player.draw(screen)
+            attack1.draw(screen)
+            enemy_sprite.draw(screen)
 
-        heart.heat()
+            heart.heat()
 
-        attack1.update()
-        enemy_sprite.update()
+            attack1.update()
+            enemy_sprite.update()
 
-        screen.blit(enemy_text, (50, 50))
-        screen.blit(big_text, (100, 700))
-        screen.blit(damage_text, (470, 520))
-        screen.blit(enemy_hp, (730, 310))
-        screen.blit(player_hp, (730, 480))
+            screen.blit(enemy_text, (50, 50))
+            screen.blit(big_text, (100, 700))
+            screen.blit(damage_text, (470, 520))
+            screen.blit(enemy_hp, (730, 310))
+            screen.blit(player_hp, (730, 480))
 
-        pygame.display.flip()
-        clock.tick(60)
+            pygame.display.flip()
+            clock.tick(60)
 
-    return
+        return
 
 
 if __name__ == '__main__':
-    undertale()
+    a = Undertale()
+    a.undertale()
