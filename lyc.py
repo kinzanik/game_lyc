@@ -4,7 +4,6 @@ import pygame
 import random as r
 
 
-pygame.init()
 width, height = 1200, 800
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Undertale')
@@ -457,7 +456,7 @@ def undertale():
                     elif choice_enemy == 2:
                         enemy = Enemy2()
                         DrawEnemy(enemy_sprite, enemy.get_name(), box_x + box_width // 2 - 90, -20)
-                    spider_song.play(loops=-1)
+                    # spider_song.play(loops=-1)`
 
                     enemy_text = small_font.render(f'На вас напал: {enemy.get_name()}', True, 'white')
                     big_text = big_font.render('НАЖМИТЕ [X] ЧТО БЫ ПРИНЯТЬ БОЙ', True, 'white')
