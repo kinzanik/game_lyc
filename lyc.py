@@ -435,11 +435,11 @@ def undertale():
         if heart.get_hp() <= 0:
             attack1.empty()
             spider_song.stop()
-            return 'lose'
+            return False
         elif enemy.get_hp() <= 0:
             attack1.empty()
             spider_song.stop()
-            return 'win'
+            return True
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
