@@ -8,24 +8,24 @@ pygame.init()
 width, height = 1200, 800
 screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption('Undertale')
-heart_image = pygame.image.load('./data/heart.png')
+heart_image = pygame.image.load('./data1/heart.png')
 box_width, box_height = 204, 204
 box_x, box_y = (width - box_width) // 2 + 2, (height - box_height) // 2
 heart_width, heart_height = 16, 16
 heart_speed = 5
 clock = pygame.time.Clock()
 
-heat_sound = pygame.mixer.Sound('./data/snd_curtgunshot.ogg')
-spider_song = pygame.mixer.Sound('./data/mus_spider.ogg')
-text_sound = pygame.mixer.Sound('./data/text.mp3')
+heat_sound = pygame.mixer.Sound('./data1/snd_curtgunshot.ogg')
+spider_song = pygame.mixer.Sound('./data1/mus_spider.ogg')
+text_sound = pygame.mixer.Sound('./data1/text.mp3')
 
-big_font = pygame.font.Font('./data/Minecraft Rus NEW.otf', 40)
-small_font = pygame.font.Font('./data/Minecraft Rus NEW.otf', 20)
+big_font = pygame.font.Font('./data1/Minecraft Rus NEW.otf', 40)
+small_font = pygame.font.Font('./data1/Minecraft Rus NEW.otf', 20)
 
 
 class Player(pygame.sprite.Sprite):
-    default_heart = pygame.image.load('./data/heart.png')
-    immortal_heart = pygame.image.load('./data/immortal_heart.png')
+    default_heart = pygame.image.load('./data1/heart.png')
+    immortal_heart = pygame.image.load('./data1/immortal_heart.png')
 
     def __init__(self, group):
         super().__init__(group)
@@ -80,7 +80,7 @@ class Player(pygame.sprite.Sprite):
 class AttackBar(pygame.sprite.Sprite):
     def __init__(self, group, x=335, y=530):
         super().__init__(group)
-        self.image = pygame.image.load('./data/trash.png')
+        self.image = pygame.image.load('./data1/trash.png')
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
 
@@ -88,7 +88,7 @@ class AttackBar(pygame.sprite.Sprite):
 class AttackLine(pygame.sprite.Sprite):
     def __init__(self, group, x=335, y=530):
         super().__init__(group)
-        self.image = pygame.image.load('./data/line.png')
+        self.image = pygame.image.load('./data1/line.png')
         self.rect = self.image.get_rect()
         self.default_x = x
         self.rect.x, self.rect.y = x, y
@@ -109,7 +109,7 @@ class Attack1(pygame.sprite.Sprite):
         super().__init__(group)
         self.vector = vector
         self.name = 'peaks'
-        self.image = pygame.image.load(f'./data/attack_sprite1_{vector}.png')
+        self.image = pygame.image.load(f'./data1/attack_sprite1_{vector}.png')
         self.rect = self.image.get_rect()
         if self.vector == 'down':
             self.rect.x = r.randint((width - box_width) // 2, (width - box_width) // 2 + 180)
@@ -145,7 +145,7 @@ class Attack2(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group)
         self.name = 'ball'
-        self.image = pygame.image.load('./data/attack_sprite2.png')
+        self.image = pygame.image.load('./data1/attack_sprite2.png')
         self.rect = self.image.get_rect()
         self.vx = 0
         self.touch = 0
@@ -166,7 +166,7 @@ class Attack2(pygame.sprite.Sprite):
         if self.touch >= 3:
             self.broken += 1
         if self.broken % 5 == 0:
-            self.image = pygame.image.load(f'./data/broken_ball{self.broken // 5}.png')
+            self.image = pygame.image.load(f'./data1/broken_ball{self.broken // 5}.png')
             self.broken += 1
         if self.broken < 5:
             if self.rect.x <= box_x or self.rect.x >= box_x + box_width - 14:
@@ -191,7 +191,7 @@ class Attack3(pygame.sprite.Sprite):
     def __init__(self, group, y, move):
         super().__init__(group)
         self.name = 'bone'
-        self.image = pygame.image.load('./data/bone.png')
+        self.image = pygame.image.load('./data1/bone.png')
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = box_x + 200, y
         self.move = move
@@ -216,7 +216,7 @@ class Attack4(pygame.sprite.Sprite):
     def __init__(self, group, x, y, posx, posy):
         super().__init__(group)
         self.name = 'block'
-        self.image = pygame.image.load('./data/block.png')
+        self.image = pygame.image.load('./data1/block.png')
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x + posx * 20, y - posy * 20
         self.vy = 3
@@ -243,10 +243,10 @@ class Attack4(pygame.sprite.Sprite):
 
     def blink(self):
         if self.is_blink == 1:
-            self.image = pygame.image.load('./data/empty_block.png')
+            self.image = pygame.image.load('./data1/empty_block.png')
             self.blink_count += 1
         else:
-            self.image = pygame.image.load('./data/block.png')
+            self.image = pygame.image.load('./data1/block.png')
 
         if self.blink_count == 3:
             self.is_ban = True
@@ -266,10 +266,10 @@ class DrawEnemy(pygame.sprite.Sprite):
         self.name = name
         self.count_frames = 2
         if self.name.lower() == 'nerdlin':
-            self.image_text = './data/Nerdlin'
+            self.image_text = './data1/Nerdlin'
             self.image = pygame.image.load(f'{self.image_text}{self.count_frames}.png')
         elif self.name.lower() == 'ghost':
-            self.image_text = './data/ghost1'
+            self.image_text = './data1/ghost1'
             self.image = pygame.image.load(f'{self.image_text}.png')
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = x, y
@@ -435,11 +435,11 @@ def undertale():
         if heart.get_hp() <= 0:
             attack1.empty()
             spider_song.stop()
-            return False
+            return 'lose'
         elif enemy.get_hp() <= 0:
             attack1.empty()
             spider_song.stop()
-            return True
+            return 'win'
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
